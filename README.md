@@ -10,6 +10,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat)
 
 **🏆 2nd Place — SustainAI Hackathon 2026**
+This project was developed as part of the SustainAI Buildathon at the Ramaiah Institute of Technology (MSRIT) , CityLens is an AI-driven urban resilience platform built during a high-intensity, 2-hour innovation sprint. The project leverages advanced generative AI to transform raw geographic data into actionable sustainability command centers and build impactful, sustainability-driven solutions for modern cities.
 
 *Identify urban heat micro-zones, get AI-generated sustainability interventions, and visualise city-wide climate risk — for any city on Earth.*
 
