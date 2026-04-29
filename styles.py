@@ -127,6 +127,7 @@ html, body, [class*="css"] {
 }
 .stButton > button:hover {
     background: linear-gradient(135deg, #1a4a10, #2a6a18) !important;
+    color: #ffffff !important;
     box-shadow: 0 0 30px rgba(57,255,20,0.35), 0 0 60px rgba(57,255,20,0.1) !important;
     transform: translateY(-1px) !important;
 }
@@ -167,6 +168,11 @@ html, body, [class*="css"] {
     font-size: 1.8rem !important;
     font-weight: 700 !important;
     color: #39ff14 !important;
+}
+[data-testid="stMetricDelta"] {
+    color: #ffffff !important;
+    opacity: 0.8 !important;
+    font-weight: 500 !important;
 }
 
 /* ── Section Headers ── */
@@ -260,6 +266,10 @@ html, body, [class*="css"] {
     letter-spacing: 2px;
     text-transform: uppercase;
     margin-bottom: 10px;
+}
+.map-legend-text {
+    color: #d0d8e8 !important;
+    font-weight: 500;
 }
 
 /* ── Spinner ── */

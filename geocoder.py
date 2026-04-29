@@ -12,18 +12,25 @@ import time
 _geolocator = Nominatim(user_agent="CityLens/1.0 (urban-resilience-engine)")
 
 
+import time
+
+_last_request_time = 0.0
+
+def _rate_limit():
+    """Ensure at least 1.1 seconds between Nominatim calls to avoid being blocked."""
+    global _last_request_time
+    now = time.time()
+    elapsed = now - _last_request_time
+    if elapsed < 1.1:
+        time.sleep(1.1 - elapsed)
+    _last_request_time = time.time()
+
 def geocode_city(query: str) -> tuple[float, float] | None:
     """
     Convert a city name / free text query to (latitude, longitude).
-
-    Args:
-        query: Human-readable location string, e.g. "Mumbai, India"
-
-    Returns:
-        (lat, lon) tuple on success, or None if the location cannot be found.
     """
     try:
-        time.sleep(1)  # Nominatim 1 req/sec policy
+        _rate_limit()
         location = _geolocator.geocode(query, timeout=10)
         if location is None:
             return None
@@ -53,7 +60,7 @@ def reverse_geocode(lat: float, lon: float) -> str:
         A real place name string, or a coordinate fallback label on failure.
     """
     try:
-        time.sleep(1)  # Nominatim 1 req/sec policy
+        _rate_limit()
         location = _geolocator.reverse(
             (lat, lon),
             exactly_one=True,

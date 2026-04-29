@@ -123,6 +123,16 @@ cityLens_sustainAI/
 
 ---
 
+## 🚀 Deployment
+
+The easiest way to deploy CityLens is via **Streamlit Community Cloud**.
+
+1. **Push your code to GitHub.**
+2. Go to [share.streamlit.io](https://share.streamlit.io/) and connect your GitHub account.
+3. Deploy the repository and add your `GEMINI_API_KEY` to the **Secrets** section in Advanced Settings.
+
+For a detailed step-by-step guide, see [deployment_guide.md](file:///C:/Users/manis/.gemini/antigravity/brain/97ff4ca9-eec3-415d-af42-bc5497d5078b/deployment_guide.md).
+
 ## 🛠️ Tech Stack
 
 | Layer | Technology |

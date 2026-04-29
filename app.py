@@ -240,10 +240,10 @@ if st.session_state.results:
             <div style="display:flex; gap:20px; margin-top:10px; flex-wrap:wrap;
                         font-family:'JetBrains Mono',monospace; font-size:0.72rem;">
                 <span style="color:#888;">LEGEND:</span>
-                <span><span style="color:#FF4B4B;">●</span> CRITICAL (8-10)</span>
-                <span><span style="color:#FFA500;">●</span> MODERATE (5-7)</span>
-                <span><span style="color:#00FF00;">●</span> LOW RISK (1-4)</span>
-                <span><span style="color:#6688ff;">📍</span> INTERVENTION SITES</span>
+                <span class="map-legend-text"><span style="color:#FF4B4B;">●</span> CRITICAL (8-10)</span>
+                <span class="map-legend-text"><span style="color:#FFA500;">●</span> MODERATE (5-7)</span>
+                <span class="map-legend-text"><span style="color:#00FF00;">●</span> LOW RISK (1-4)</span>
+                <span class="map-legend-text"><span style="color:#ff66ff;">📍</span> INTERVENTION SITES</span>
             </div>
             """,
             unsafe_allow_html=True,
@@ -301,7 +301,7 @@ if st.session_state.results:
                 AUDIT TARGET &nbsp;·&nbsp; {query.upper()}<br>
                 COORDINATES &nbsp;·&nbsp; {lat:.6f}&#176; N, {lon:.6f}&#176; E<br>
                 ZONES DETECTED &nbsp;·&nbsp; {zone_count} &nbsp;·&nbsp; PEAK SCORE {max_score}/10<br>
-                ENGINE &nbsp;·&nbsp; GEMINI 2.5 FLASH + NOMINATIM<br>
+                ENGINE &nbsp;·&nbsp; GEMINI 3 FLASH + NOMINATIM<br>
                 STATUS &nbsp;·&nbsp; <span style="color:#39ff14;">&#10003; ANALYSIS COMPLETE</span>
             </div>
             """,
@@ -364,7 +364,7 @@ st.markdown(
         &nbsp;·&nbsp;
         Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors
         &nbsp;·&nbsp;
-        AI by <a href="https://deepmind.google/technologies/gemini/" target="_blank">Google Gemini</a>
+        AI by <a href="https://deepmind.google/technologies/gemini/" target="_blank">Google Gemini 3</a>
     </div>
     """,
     unsafe_allow_html=True,

@@ -45,8 +45,8 @@ Always return ONLY valid JSON — no markdown fences, no commentary, no extra ke
 # ── Retry decorator: 3 attempts, 4s → 10s backoff ─────────────────────────────
 # reraise=False so tenacity raises RetryError after exhaustion (catchable below)
 @retry(
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=4, max=10),
+    stop=stop_after_attempt(2),
+    wait=wait_exponential(multiplier=1, min=2, max=5),
     retry=retry_if_exception_type(Exception),
     reraise=False,
 )
@@ -61,9 +61,9 @@ def _safe_generate(client, model_name: str, contents: str, config):
 
 # Model fallback chain — tried in order if the previous returns 503/unavailable
 _MODEL_CHAIN = [
+    "gemini-3-flash-preview",
     "gemini-2.0-flash",
-    "gemini-2.5-flash",
-    "gemini-1.5-flash",
+    "gemini-2.5-flash-lite",
 ]
 
 
@@ -106,6 +106,8 @@ def analyze_urban_heat(lat: float, lon: float) -> dict | None:
         try:
             response = _safe_generate(client, model_name, user_prompt, gen_config)
             raw_text = response.text.strip()
+            # Log for debugging if needed (visible in terminal)
+            print(f"DEBUG: Received AI response for ({lat}, {lon})")
             data = json.loads(raw_text)
             return _validate_response(data, lat, lon)
 
