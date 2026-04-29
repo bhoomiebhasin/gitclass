@@ -67,7 +67,7 @@ _MODEL_CHAIN = [
 ]
 
 
-def analyze_urban_heat(lat: float, lon: float) -> dict | None:
+def analyze_urban_heat(lat: float, lon: float, user_key: str | None = None) -> dict | None:
     """
     Call Gemini to identify 6-8 urban heat micro-zones around the coordinates.
     Tries a waterfall of models so a 503 on one automatically falls back to the next.
@@ -77,11 +77,11 @@ def analyze_urban_heat(lat: float, lon: float) -> dict | None:
         Dict with keys: co2_savings, water_impact, risk_summary, micro_zones (list).
     """
     load_dotenv(override=True)
-    api_key = os.getenv("GEMINI_API_KEY")
+    api_key = user_key or os.getenv("GEMINI_API_KEY")
 
     if not api_key:
         raise ValueError(
-            "GEMINI_API_KEY is not set. Please add it to your .env file."
+            "GEMINI_API_KEY is not set. Please provide it in the input field or .env file."
         )
 
     client = genai.Client(api_key=api_key)

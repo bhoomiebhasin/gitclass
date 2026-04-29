@@ -22,9 +22,9 @@ def cached_geocode(query: str):
 
 
 @st.cache_data(show_spinner=False, ttl=3600)
-def cached_ai_audit(lat: float, lon: float):
-    """Cache AI analysis – same coordinates never hit Gemini twice."""
-    return analyze_urban_heat(lat, lon)
+def cached_ai_audit(lat: float, lon: float, user_key: str | None = None):
+    """Cache AI analysis – same coordinates never hit Gemini twice (unless key changes)."""
+    return analyze_urban_heat(lat, lon, user_key)
 
 # ── Page Configuration ───────────────────────────────────────────────────────
 st.set_page_config(
@@ -106,6 +106,15 @@ if st.session_state.results is None:
                 key="city_input",
                 value=st.session_state.city_prefill,
             )
+            
+            # ── API Key Input ──
+            user_api_key = st.text_input(
+                label="Gemini API Key",
+                placeholder="Paste your Gemini API Key here (optional)",
+                type="password",
+                help="Get a free key at aistudio.google.com. If left blank, the app will use the system key.",
+            )
+            
             audit_clicked = st.form_submit_button(
                 "🔍  AUDIT CITY",
                 use_container_width=True,
@@ -130,13 +139,20 @@ else:
             unsafe_allow_html=True,
         )
 
-    search_col, btn_col = st.columns([5, 1])
+    search_col, key_col, btn_col = st.columns([4, 2, 1])
     with search_col:
         city_query = st.text_input(
             label="city",
             placeholder="Search another city…",
             label_visibility="collapsed",
             key="city_input",
+        )
+    with key_col:
+        user_api_key = st.text_input(
+            label="API Key",
+            placeholder="API Key",
+            label_visibility="collapsed",
+            type="password",
         )
     with btn_col:
         audit_clicked = st.button("🔍  AUDIT CITY", key="audit_btn", use_container_width=True)
@@ -167,7 +183,7 @@ if audit_clicked:
     # ── Step 2: AI Analysis (cached + retry) ─────────────────────────────────
     with st.spinner("🤖 AI analyzing urban heat patterns — then grounding zone names via OpenStreetMap..."):
         try:
-            analysis = cached_ai_audit(lat, lon)
+            analysis = cached_ai_audit(lat, lon, user_api_key)
         except ValueError as e:
             st.error(f"🔑 **API Key Error:** {e}")
             st.stop()
