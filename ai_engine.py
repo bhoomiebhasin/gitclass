@@ -106,13 +106,29 @@ def analyze_urban_heat(lat: float, lon: float) -> dict | None:
         try:
             response = _safe_generate(client, model_name, user_prompt, gen_config)
             raw_text = response.text.strip()
-            # Log for debugging if needed (visible in terminal)
-            print(f"DEBUG: Received AI response for ({lat}, {lon})")
+            
+            # ── Robust extraction: Strip Markdown fences if model hallucinations occur ──
+            if raw_text.startswith("```"):
+                # Find the first { and the last }
+                start = raw_text.find("{")
+                end = raw_text.rfind("}")
+                if start != -1 and end != -1:
+                    raw_text = raw_text[start:end+1]
+
+            # Log for debugging (visible in Streamlit logs)
+            print(f"DEBUG: AI response for ({lat}, {lon}): {raw_text[:100]}...")
+            
             data = json.loads(raw_text)
+            
+            if not isinstance(data, dict):
+                raise ValueError("AI response is not a JSON object.")
+                
             return _validate_response(data, lat, lon)
 
-        except json.JSONDecodeError as e:
-            raise RuntimeError(f"AI returned malformed JSON — cannot parse response: {e}") from e
+        except (json.JSONDecodeError, ValueError) as e:
+            # If one model fails JSON, we try the next in the chain
+            last_error = f"Malformed JSON from {model_name}: {e}"
+            continue
         except RetryError as e:
             # This model exhausted retries — try next in chain
             last_error = e
@@ -128,8 +144,9 @@ def analyze_urban_heat(lat: float, lon: float) -> dict | None:
 
     # All models exhausted
     raise RuntimeError(
-        f"All AI models are currently unavailable (high demand). "
-        f"Please wait 30 seconds and try again. Last error: {last_error}"
+        f"All AI models failed to provide a valid response. "
+        f"This may be due to high demand or API rate limits. "
+        f"Please wait 30 seconds and try again. (Details: {last_error})"
     )
 
 
